@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { isDue, isJoinable, meetingLink, newMeetingLink } from "./meeting-link.js";
+import { countStartingLaterToday, endOfDay, isDue, isJoinable, meetingLink, newMeetingLink } from "./meeting-link.js";
 
 const at = (iso) => ({ dateTime: iso });
 
@@ -33,6 +33,18 @@ test("skips all-day, declined and focus-time events", () => {
   assert.equal(isJoinable({ start: at("2026-10-26T10:00:00Z"), attendees: [{ self: true, responseStatus: "declined" }] }), false);
   assert.equal(isJoinable({ start: at("2026-10-26T10:00:00Z"), eventType: "focusTime" }), false);
   assert.equal(isJoinable({ start: at("2026-10-26T10:00:00Z"), attendees: [{ self: true, responseStatus: "accepted" }] }), true);
+});
+
+test("counts only meetings that start later today", () => {
+  const now = new Date(2026, 9, 26, 12, 0).getTime();
+  const startingAt = (...parts) => ({ start: { dateTime: new Date(2026, 9, ...parts).toISOString() } });
+  const events = [startingAt(26, 11, 30), startingAt(26, 12, 0), startingAt(26, 14, 0), startingAt(26, 23, 30), startingAt(27, 9, 0)];
+  assert.equal(countStartingLaterToday(events, now), 2);
+});
+
+test("end of day is the last millisecond of the local day", () => {
+  const end = new Date(endOfDay(new Date(2026, 9, 26, 7, 15).getTime()));
+  assert.deepEqual([end.getDate(), end.getHours(), end.getMinutes()], [26, 23, 59]);
 });
 
 test("is due from the lead time until the grace period ends", () => {

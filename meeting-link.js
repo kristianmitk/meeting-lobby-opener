@@ -23,6 +23,20 @@ export function isJoinable(event) {
   return self?.responseStatus !== "declined";
 }
 
+export function countStartingLaterToday(events, now) {
+  const today = new Date(now).toDateString();
+  return events.filter((event) => {
+    const start = Date.parse(event.start.dateTime);
+    return start > now && new Date(start).toDateString() === today;
+  }).length;
+}
+
+export function endOfDay(now) {
+  const end = new Date(now);
+  end.setHours(23, 59, 59, 999);
+  return end.getTime();
+}
+
 export function isDue(event, now, leadMs, lateGraceMs) {
   const start = Date.parse(event.start.dateTime);
   const end = Date.parse(event.end?.dateTime ?? event.start.dateTime);

@@ -1,4 +1,4 @@
-import { isDue, isJoinable, meetingLink, newMeetingLink } from "./meeting-link.js";
+import { countStartingLaterToday, endOfDay, isDue, isJoinable, meetingLink, newMeetingLink } from "./meeting-link.js";
 import { CLIENT_ID, DEFAULT_SETTINGS } from "./settings.js";
 
 const ALARM = "poll-calendar";
@@ -6,6 +6,7 @@ const LOOKAHEAD_MS = 12 * 60 * 60 * 1000;
 const OPENED_RETENTION_MS = 24 * 60 * 60 * 1000;
 const TOKEN_EXPIRY_MARGIN_MS = 60 * 1000;
 const SCOPE = "https://www.googleapis.com/auth/calendar.events.readonly";
+const BADGE_COLORS = { count: "#5f6368", signin: "#f29900", error: "#d93025" };
 const SHORTCUT_JOIN_WINDOW_MS = 15 * 60 * 1000;
 const LISTED_MEETINGS = 20;
 
@@ -85,14 +86,16 @@ async function poll() {
       link,
     })),
   });
-  await setStatus("ok", settings.enabled ? "Watching your calendar" : "Paused");
+  const laterToday = countStartingLaterToday(meetings.map(({ event }) => event), now);
+  await setStatus("ok", settings.enabled ? "Watching your calendar" : "Paused", laterToday);
 }
 
 async function fetchUpcomingEvents(settings) {
   const now = Date.now();
   const params = new URLSearchParams({
     timeMin: new Date(now - settings.lateGraceMinutes * 60 * 1000).toISOString(),
-    timeMax: new Date(now + LOOKAHEAD_MS).toISOString(),
+    // Reaches at least midnight so the icon can count every meeting left today
+    timeMax: new Date(Math.max(now + LOOKAHEAD_MS, endOfDay(now))).toISOString(),
     singleEvents: "true",
     orderBy: "startTime",
     maxResults: "50",
@@ -202,8 +205,20 @@ async function openLobby(url) {
   }
 }
 
-async function setStatus(state, message) {
+async function setStatus(state, message, meetingsLaterToday = 0) {
   await chrome.storage.local.set({ status: { state, message, at: Date.now() } });
-  await chrome.action.setBadgeText({ text: state === "ok" ? "" : "!" });
-  await chrome.action.setBadgeBackgroundColor({ color: state === "signin" ? "#f29900" : "#d93025" });
+  if (state === "ok") {
+    await chrome.action.setBadgeText({ text: meetingsLaterToday > 0 ? String(meetingsLaterToday) : "" });
+    await chrome.action.setBadgeBackgroundColor({ color: BADGE_COLORS.count });
+    await chrome.action.setTitle({ title: `Meeting Lobby Opener — ${laterTodayLabel(meetingsLaterToday)}` });
+    return;
+  }
+  await chrome.action.setBadgeText({ text: "!" });
+  await chrome.action.setBadgeBackgroundColor({ color: BADGE_COLORS[state] });
+  await chrome.action.setTitle({ title: `Meeting Lobby Opener — ${message}` });
+}
+
+function laterTodayLabel(count) {
+  if (count === 0) return "no more meetings today";
+  return count === 1 ? "1 more meeting today" : `${count} more meetings today`;
 }
