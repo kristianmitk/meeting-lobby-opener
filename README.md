@@ -39,8 +39,10 @@ can connect.
 
     npm run bundle
 
-writes `dist/meeting-lobby-opener.zip` from the last commit (uncommitted
-changes and `key.pem` are not included). The colleague unzips it, loads the
+writes the extension files from the last commit to `dist/meeting-lobby-opener/`
+(load that folder with **Load unpacked**) and zips it to
+`dist/meeting-lobby-opener.zip`. Uncommitted changes, tests and `key.pem` are
+not included. The colleague unzips it, loads the
 `meeting-lobby-opener` folder with **Load unpacked**, and clicks **Connect
 Google Calendar**. While the OAuth app is in *Testing*, add them as a test
 user first.
