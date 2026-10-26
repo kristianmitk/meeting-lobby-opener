@@ -54,6 +54,13 @@ the store gives the extension its own ID. Add
 OAuth client, or sign-in from the store version fails with
 `redirect_uri_mismatch`.
 
+## Chrome Web Store
+
+`store/listing.md` has every value the store form asks for, and the steps to
+do before you submit. `store/render.sh` renders the screenshots and the promo
+tile from `store/assets.html`, which shows the real popup with demo data.
+The privacy policy is [PRIVACY.md](PRIVACY.md).
+
 ## Tests
 
     npm test

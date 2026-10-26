@@ -99,6 +99,8 @@ async function fetchUpcomingEvents(settings) {
     singleEvents: "true",
     orderBy: "startTime",
     maxResults: "50",
+    // Only what meeting-link.js and the popup read; keeps attendee emails out of the response
+    fields: "summary,items(id,summary,status,eventType,start,end,hangoutLink,conferenceData/entryPoints(entryPointType,uri),location,description,attendees(self,responseStatus))",
   });
   const url = `https://www.googleapis.com/calendar/v3/calendars/primary/events?${params}`;
 

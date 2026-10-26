@@ -1,0 +1,127 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Store assets</title>
+  <style>
+    :root { --blue: #1a73e8; --ink: #202124; --muted: #5f6368; --page: #eef3fd; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; overflow: hidden; color-scheme: light; }
+    body { font-family: system-ui, sans-serif; color: var(--ink); background: var(--page); }
+
+    .shot { width: 1280px; height: 800px; display: flex; align-items: center; gap: 72px; padding: 0 88px; }
+    .copy { flex: 1; }
+    .copy h1 { font-size: 46px; line-height: 1.12; margin: 0 0 22px; letter-spacing: -.01em; }
+    .copy p { font-size: 21px; line-height: 1.5; color: var(--muted); margin: 0 0 14px; }
+    .copy .brand { display: flex; align-items: center; gap: 12px; font-size: 18px; font-weight: 600; color: var(--blue); margin-bottom: 26px; }
+    .copy .brand img { width: 36px; height: 36px; }
+
+    .browser { width: 560px; border-radius: 14px; background: #fff; box-shadow: 0 18px 50px rgba(32, 33, 36, .18); overflow: hidden; }
+    .toolbar { height: 52px; display: flex; align-items: center; gap: 12px; padding: 0 16px; background: #f1f3f4; border-bottom: 1px solid #dadce0; }
+    .address { flex: 1; height: 32px; border-radius: 16px; background: #fff; }
+    .action { position: relative; width: 32px; height: 32px; display: grid; place-items: center; border-radius: 50%; background: #dfe3e8; }
+    .action img { width: 20px; height: 20px; }
+    .badge { position: absolute; right: -3px; bottom: -2px; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 8px; background: #5f6368; color: #fff; font-size: 11px; font-weight: 600; line-height: 16px; text-align: center; }
+    .popup { position: relative; margin: 8px 16px 0 auto; width: 340px; transform-origin: top right; border-radius: 8px; box-shadow: 0 4px 16px rgba(32, 33, 36, .22); overflow: hidden; background: #fff; }
+    .popup iframe { display: block; width: 340px; border: 0; }
+
+    .tile { width: 440px; height: 280px; display: flex; flex-direction: column; justify-content: center; gap: 14px; padding: 0 36px; background: linear-gradient(135deg, #1a73e8, #1557b0); color: #fff; }
+    .tile img { width: 64px; height: 64px; border-radius: 14px; box-shadow: 0 0 0 2px rgba(255, 255, 255, .5); }
+    .tile h1 { font-size: 30px; line-height: 1.1; margin: 0; }
+    .tile p { font-size: 17px; line-height: 1.35; margin: 0; opacity: .92; }
+  </style>
+</head>
+<body>
+  <template id="tile">
+    <div class="tile">
+      <img src="../icons/icon-128.png" alt="">
+      <h1>Meeting Lobby Opener</h1>
+      <p>Opens the video-call lobby the moment your Google Calendar meeting starts.</p>
+    </div>
+  </template>
+
+  <template id="shot">
+    <div class="shot">
+      <div class="copy">
+        <div class="brand"><img src="../icons/icon-128.png" alt="">Meeting Lobby Opener</div>
+        <h1 data-slot="headline"></h1>
+        <p data-slot="line1"></p>
+        <p data-slot="line2"></p>
+      </div>
+      <div class="browser">
+        <div class="toolbar">
+          <div class="address"></div>
+          <div class="action"><img src="../icons/icon-32.png" alt=""><span class="badge" data-slot="badge"></span></div>
+        </div>
+        <div class="popup"><iframe title="Popup"></iframe></div>
+      </div>
+    </div>
+  </template>
+
+  <script type="module">
+    const SHOTS = {
+      meetings: {
+        view: "main",
+        badge: "4",
+        headline: "Never miss the start of a meeting",
+        line1: "When a Google Calendar meeting starts, the extension opens its Meet, Zoom or Teams lobby in a new tab.",
+        line2: "The icon shows how many meetings are left today.",
+      },
+      timing: {
+        view: "main",
+        badge: "4",
+        focusHelp: 1,
+        headline: "Opens on time, even after a break",
+        line1: "Choose to open the lobby up to 5 minutes early to check camera and microphone.",
+        line2: "Away when it started? It still opens when you are back, but never into a meeting that is half over.",
+      },
+      signin: {
+        view: "signin",
+        badge: "",
+        headline: "Read-only. No server.",
+        line1: "Connect your Google Calendar with read-only access. The extension works entirely in your browser.",
+        line2: "Join any time with one click, Alt+Shift+J, or start an instant Google Meet.",
+      },
+    };
+
+    const POPUP_SCALE = 1.5;
+    const TOOLBAR_AND_GAPS_PX = 52 + 8 + 24;
+
+    const name = new URLSearchParams(location.search).get("shot") ?? "meetings";
+    if (name === "tile") {
+      document.body.append(document.getElementById("tile").content.cloneNode(true));
+    } else {
+      await renderShot(SHOTS[name]);
+    }
+
+    async function renderShot(shot) {
+      document.body.append(document.getElementById("shot").content.cloneNode(true));
+      for (const slot of document.querySelectorAll("[data-slot]")) slot.textContent = shot[slot.dataset.slot];
+      document.querySelector(".badge").hidden = !shot.badge;
+
+      const frame = document.querySelector("iframe");
+      // srcdoc keeps the real popup.html, with the demo stub loaded before popup.js
+      const popupHtml = (await (await fetch("../popup.html")).text())
+        .replace("<head>", `<head><base href="${new URL("../", location.href)}"><style>:root{color-scheme:light} *,::after,::before{transition:none!important}</style>`)
+        .replace('<script type="module"', `<script>window.storeView=${JSON.stringify(shot.view)}<\/script><script src="store/stub.js"><\/script><script type="module"`);
+      await new Promise((resolve) => {
+        frame.addEventListener("load", resolve, { once: true });
+        frame.srcdoc = popupHtml;
+      });
+      await settle();
+      const popupHeight = frame.contentDocument.body.scrollHeight;
+      frame.style.height = `${popupHeight}px`;
+      document.querySelector(".popup").style.transform = `scale(${POPUP_SCALE})`;
+      // A transform does not grow the layout box, so the browser frame is sized by hand
+      document.querySelector(".browser").style.height = `${TOOLBAR_AND_GAPS_PX + popupHeight * POPUP_SCALE}px`;
+      if (shot.focusHelp !== undefined) frame.contentDocument.querySelectorAll(".help")[shot.focusHelp].focus();
+      await settle();
+    }
+
+    // Lets popup.js render before the frame is measured and captured
+    function settle() {
+      return new Promise((resolve) => setTimeout(resolve, 500));
+    }
+  </script>
+</body>
+</html>
