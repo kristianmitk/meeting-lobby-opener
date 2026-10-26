@@ -1,0 +1,39 @@
+{
+  "manifest_version": 3,
+  "name": "Meeting Lobby Opener",
+  "version": "0.1.0",
+  "description": "Opens the video-call lobby in a new tab when a Google Calendar meeting starts.",
+  "permissions": [
+    "identity",
+    "alarms",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://www.googleapis.com/*",
+    "https://oauth2.googleapis.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Meeting Lobby Opener"
+  },
+  "options_ui": {
+    "page": "popup.html",
+    "open_in_tab": true
+  },
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzA4aq2yl6lcqyl02pD/fY2X2lrXxDW1QFdOVoXVLw81b6yUresvsO5vrM05go7Q6OMDHTLi3gpXvBQIxp9yuyGVbeAO+G2rGWyRGShskKScyQRETxrctrBQyIrDrJvekgZFjVnWiqRgV+bfMi/GqX6Rxwpg0/ytmISuzdPESvU3FrKplAm476z1yX3UZ+xQmJAhWjaOdHvSlBLsToO4S1GXqEwKEsMy2NbZRzTRqvnbNrZAy6yk1yD7wQsWWf6IJre2kGt2hpZpTaIYdeK0qLGWfxmdn0O1g7KsuAXj+BSjtE9IG6dYoQGo3SNJ5HK6miem2KfPaNuQw8NmcRS85zwIDAQAB",
+  "commands": {
+    "join-meeting": {
+      "suggested_key": {
+        "default": "Alt+Shift+J"
+      },
+      "description": "Join the current or next meeting"
+    },
+    "new-meeting": {
+      "description": "Start an instant Google Meet"
+    }
+  }
+}

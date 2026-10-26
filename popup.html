@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Meeting Lobby Opener</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header>
+    <h1>Meeting Lobby Opener</h1>
+    <label class="switch" title="Open meetings automatically">
+      <input type="checkbox" id="enabled">
+      <span></span>
+    </label>
+  </header>
+
+  <section id="signin" hidden>
+    <p id="signin-message"></p>
+    <button id="connect" class="primary">Connect Google Calendar</button>
+    <p class="hint">Read-only access to your events. Nothing leaves your browser.</p>
+  </section>
+
+  <section id="main" hidden>
+    <p id="status" hidden></p>
+    <div class="section-head">
+      <h2>Next meetings</h2>
+      <button id="new-meeting" class="new-meeting" title="Start an instant Google Meet">+ New meeting</button>
+    </div>
+    <ul id="upcoming"></ul>
+    <p id="empty" class="hint" hidden>No meetings with a video link in the next 12 hours.</p>
+
+    <h2>Timing</h2>
+    <div class="row">
+      <label for="leadSeconds">Open the lobby</label>
+      <span class="help" tabindex="0" data-tip="When the meeting tab opens. Opening a bit early gives you time to check camera and microphone in the lobby before you join.">?</span>
+      <select id="leadSeconds">
+        <option value="0">when it starts</option>
+        <option value="30">30 s before</option>
+        <option value="60">1 min before</option>
+        <option value="120">2 min before</option>
+        <option value="300">5 min before</option>
+      </select>
+    </div>
+    <div class="row">
+      <label for="lateGraceMinutes">Missed the start?</label>
+      <span class="help" tabindex="0" data-tip="If your laptop was asleep or the browser was closed when a meeting began, the lobby still opens when you are back, but only within this time, so you never land in a meeting that is half over. Each meeting opens only once.">?</span>
+      <select id="lateGraceMinutes">
+        <option value="2">2 min after</option>
+        <option value="5">5 min after</option>
+        <option value="10">10 min after</option>
+        <option value="15">15 min after</option>
+      </select>
+    </div>
+    <div class="row">
+      <span>Join shortcut</span>
+      <span class="help" tabindex="0" data-tip="Opens the meeting that is running or starts within 15 minutes. Chrome only lets you change extension shortcuts on its own shortcuts page.">?</span>
+      <kbd id="shortcut">not set</kbd>
+      <button id="change-shortcut" class="link">Change</button>
+    </div>
+
+    <footer>
+      <span id="account"></span>
+      <button id="disconnect" class="link">Disconnect</button>
+    </footer>
+  </section>
+
+  <script type="module" src="popup.js"></script>
+</body>
+</html>
