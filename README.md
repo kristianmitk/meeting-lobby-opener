@@ -35,6 +35,16 @@ you want to publish to the Web Store under the same ID.
 While the app is in *Testing*, only users listed under Audience → Test users
 can connect.
 
+## Share with a colleague
+
+    npm run bundle
+
+writes `dist/meeting-lobby-opener.zip` from the last commit (uncommitted
+changes and `key.pem` are not included). The colleague unzips it, loads the
+`meeting-lobby-opener` folder with **Load unpacked**, and clicks **Connect
+Google Calendar**. While the OAuth app is in *Testing*, add them as a test
+user first.
+
 ## Tests
 
     npm test

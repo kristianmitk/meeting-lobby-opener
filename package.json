@@ -1,1 +1,8 @@
-{"type":"module","private":true,"scripts":{"test":"node --test"}}
+{
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "node --test",
+    "bundle": "mkdir -p dist && git archive --format=zip --prefix=meeting-lobby-opener/ -o dist/meeting-lobby-opener.zip HEAD"
+  }
+}
