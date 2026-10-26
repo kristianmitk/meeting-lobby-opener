@@ -66,4 +66,4 @@ new date.
 
 ## Contact
 
-Open an issue at <https://github.com/kristianmitk/gmeet-lobby-opener/issues>.
+Open an issue at <https://github.com/kristianmitk/meeting-lobby-opener/issues>.

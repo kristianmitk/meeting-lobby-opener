@@ -33,7 +33,7 @@ PRIVACY
 • Works entirely in your browser. There is no server, no analytics and no tracking
 • Disconnect revokes the access at once
 
-Privacy policy: https://github.com/kristianmitk/gmeet-lobby-opener/blob/main/PRIVACY.md
+Privacy policy: https://github.com/kristianmitk/meeting-lobby-opener/blob/main/PRIVACY.md
 ```
 
 **Category**: Productivity → Workflow & Planning
@@ -48,9 +48,9 @@ Privacy policy: https://github.com/kristianmitk/gmeet-lobby-opener/blob/main/PRI
 | Screenshots (1280×800) | `screenshot-1-meetings.png`, `screenshot-2-timing.png`, `screenshot-3-signin.png` |
 | Small promo tile (440×280) | `promo-tile-440x280.png` |
 
-**Homepage URL**: https://github.com/kristianmitk/gmeet-lobby-opener
+**Homepage URL**: https://github.com/kristianmitk/meeting-lobby-opener
 
-**Support URL**: https://github.com/kristianmitk/gmeet-lobby-opener/issues
+**Support URL**: https://github.com/kristianmitk/meeting-lobby-opener/issues
 
 ## Privacy tab
 
@@ -84,7 +84,7 @@ Then tick all three certifications:
 - I do not use or transfer user data for purposes that are unrelated to my item's single purpose
 - I do not use or transfer user data to determine creditworthiness or for lending purposes
 
-**Privacy policy URL**: https://github.com/kristianmitk/gmeet-lobby-opener/blob/main/PRIVACY.md
+**Privacy policy URL**: https://github.com/kristianmitk/meeting-lobby-opener/blob/main/PRIVACY.md
 
 ## Distribution tab
 
