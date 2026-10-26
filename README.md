@@ -47,6 +47,13 @@ not included. The colleague unzips it, loads the
 Google Calendar**. While the OAuth app is in *Testing*, add them as a test
 user first.
 
+The same command writes `dist/meeting-lobby-opener-store.zip` for the Chrome
+Web Store. The store rejects the `key` field, so this zip leaves it out, and
+the store gives the extension its own ID. Add
+`https://<store extension ID>.chromiumapp.org/` as a second redirect URI on the
+OAuth client, or sign-in from the store version fails with
+`redirect_uri_mismatch`.
+
 ## Tests
 
     npm test
