@@ -3,6 +3,12 @@
   "name": "Meeting Lobby Opener",
   "version": "0.1.0",
   "description": "Opens the video-call lobby in a new tab when a Google Calendar meeting starts.",
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
   "permissions": [
     "identity",
     "alarms",
@@ -17,6 +23,10 @@
     "type": "module"
   },
   "action": {
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "32": "icons/icon-32.png"
+    },
     "default_popup": "popup.html",
     "default_title": "Meeting Lobby Opener"
   },

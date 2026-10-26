@@ -3,6 +3,6 @@
   "private": true,
   "scripts": {
     "test": "node --test",
-    "bundle": "rm -rf dist && mkdir -p dist/meeting-lobby-opener && git archive HEAD manifest.json background.js meeting-link.js settings.js popup.html popup.css popup.js README.md | tar -x -C dist/meeting-lobby-opener && cd dist && zip -qr meeting-lobby-opener.zip meeting-lobby-opener"
+    "bundle": "rm -rf dist && mkdir -p dist/meeting-lobby-opener && git archive HEAD manifest.json background.js meeting-link.js settings.js popup.html popup.css popup.js icons/icon-16.png icons/icon-32.png icons/icon-48.png icons/icon-128.png README.md | tar -x -C dist/meeting-lobby-opener && cd dist && zip -qr meeting-lobby-opener.zip meeting-lobby-opener"
   }
 }
