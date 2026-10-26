@@ -64,3 +64,7 @@ The privacy policy is [PRIVACY.md](PRIVACY.md).
 ## Tests
 
     npm test
+
+## License
+
+MIT, see [LICENSE](LICENSE).
